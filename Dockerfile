@@ -7,6 +7,6 @@ RUN npm install
 RUN npm install typescript -g
 RUN tsc
 
-RUN npm install pm2 -g
-CMD ["pm2-runtime", "dist/index.js"]
+RUN npm install nodemon -g
+CMD ["nodemon", "dist/index.js"]
 EXPOSE 8080
