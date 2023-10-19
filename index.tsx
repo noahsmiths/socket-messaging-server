@@ -1,26 +1,33 @@
-const express = require('express');
-const app = express();
-const http = require('http').createServer(app);
-const io = require('socket.io')(http, {
+import { Server } from 'socket.io';
+
+const PORT = 8080;
+
+const io = new Server({
     cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
+        origin: '*',
+        methods: ['GET', 'POST']
     }
 });
 
-io.on('connection', (socket: any) => {
-    console.log('A user connected.');
+interface RoomMessage {
+    event: string,
+    body: string
+}
 
-    socket.on('ping', () => {
-        console.log('Received ping from client');
-        socket.emit('pong');
+interface Room {
+    room: string
+}
+
+io.on('connection', (socket) => {
+    socket.on('join', ({ room } : Room) => {
+        socket.join(room);
     });
 
-    socket.on('disconnect', () => {
-        console.log('A user disconnected.');
+    socket.on('broadcast', ({ room, event, body }: Room & RoomMessage ) => {
+        // socket.to(room)... will prevent event from being emitted to sending socket
+        io.to(room).emit(event, body);
     });
 });
 
-http.listen(3001, () => {
-    console.log('Server is running on port 3001');
-});
+io.listen(PORT);
+console.log(`Listening on port :${PORT}`);
