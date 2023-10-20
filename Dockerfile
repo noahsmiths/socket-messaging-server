@@ -7,6 +7,5 @@ RUN npm install
 RUN npm install typescript -g
 RUN tsc
 
-RUN npm install nodemon -g
-CMD ["nodemon", "dist/index.js"]
+CMD ["node", "dist/index.js"]
 EXPOSE 8080
