@@ -23,7 +23,7 @@ io.on('connection', (socket) => {
         socket.join(room);
     });
 
-    socket.on('broadcast', ({ room, event, body }: Room & RoomMessage ) => {
+    socket.on('broadcast', ({ room, event, body }: Room & RoomMessage) => {
         // socket.to(room)... will prevent event from being emitted to sending socket
         io.to(room).emit(event, body);
     });
